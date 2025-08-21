@@ -7,5 +7,6 @@
     "vscord.ignore.workspacesText": "",
     "[typescriptreact]": {
         "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    }
+    },
+    "vscode-pets.theme": "forest"
 }
