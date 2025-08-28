@@ -49,7 +49,7 @@ type KeyItem = {
 };
 
 export default function KeyPage() {
-  const [name, setName] = useState("My Api Key");
+  const [name, setName] = useState("My Api Key"); // default name
   const [items, setItems] = useState<KeyItem[]>([]);
   const [justCreated, setJustCreated] = useState<{
     key: string;
@@ -78,7 +78,7 @@ export default function KeyPage() {
     }
   }
 
-  async function load() {
+  async function load() { // list all keys
     const res = await fetch("/api/keys", { cache: "no-store" });
     const data = await res.json();
     setItems(data.items ?? []);
@@ -95,7 +95,7 @@ export default function KeyPage() {
 }
 
   useEffect(() => {
-    load();
+    load(); // automatically load keys 
   }, [createKey]);
 
   return (
@@ -240,36 +240,46 @@ export default function KeyPage() {
                       </th>
                     </tr>
                   </thead>
-                  <TableBody className="divide-y divide-[#FFE0D6] bg-white">
-                    {items.map((row) => (
+                    {items.length === 0 ? (
+                    <tbody>
+                      <tr>
+                      <td colSpan={5} className="py-8 text-center text-gray-500">
+                        No API keys found.
+                      </td>
+                      </tr>
+                    </tbody>
+                    ) : (
+                    <TableBody className="divide-y divide-[#FFE0D6] bg-white">
+                      {items.map((row) => (
                       <TableRow key={row.id}>
                         <TableCell>{row.name}</TableCell>
                         <TableCell className="font-mono">
-                          {row.masked}
+                        {row.masked}
                         </TableCell>
                         <TableCell>
-                          {new Date(row.createdAt).toLocaleString()}
+                        {new Date(row.createdAt).toLocaleString()}
                         </TableCell>
                         <TableCell>
-                          {row.revoked ? (
-                            <Badge variant="secondary">Revoked</Badge>
-                          ) : (
-                            <Badge variant="default">Active</Badge>
-                          )}
+                        {row.revoked ? (
+                          <Badge variant="secondary">Revoked</Badge>
+                        ) : (
+                          <Badge variant="default">Active</Badge>
+                        )}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            disabled={row.revoked}
-                            onClick={() => revokeKey(row.id)}
-                          >
-                            Revoke
-                          </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          disabled={row.revoked}
+                          onClick={() => revokeKey(row.id)}
+                        >
+                          Revoke
+                        </Button>
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
+                      ))}
+                    </TableBody>
+                    )}
                 </table>
               </div>
             </div>

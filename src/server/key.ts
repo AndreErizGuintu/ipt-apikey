@@ -1,38 +1,38 @@
-import { randomBytes, createHash } from "crypto";
+import { randomBytes, createHash } from "crypto"; //
 import { apiKeys } from "./db/schema";
 import { db } from "./db"; // Add this import for the db instance
 import { desc, eq } from "drizzle-orm";
 
-const KEY_PREFIX = process.env.KEY_PREFIX ?? "sk_live";
+const KEY_PREFIX = process.env.KEY_PREFIX ?? "sk_live"; 
 
 export function generatePlainKey(bytes: number = 24) {
-  const raw = randomBytes(bytes).toString("base64url");
-  const key = `${KEY_PREFIX}${raw}`;
-  const last4 = key.slice(-4);
+  const raw = randomBytes(bytes).toString("base64url"); //dsgsdgusogisdgshdgsuoghud
+  const key = `${KEY_PREFIX}${raw}`; // sk_livedsgsdgusogisdgshdgsuoghud
+  const last4 = key.slice(-4); // ghud
   return { key, last4 };
 }
 
-export function sha256(data: string) {
-  return createHash("sha256").update(data).digest("hex");
+export function sha256(data: string) { 
+  return createHash("sha256").update(data).digest("hex"); //dsgsdgusogisdgshdgsuoghud  //asuh317ey01972rg9r17rg37
 }
 
 export async function insertKey(name: string){
   const { key, last4 } = generatePlainKey();
-  const hashed = sha256(key);
-  const id = crypto.randomUUID();
+  const hashed = sha256(key);   //asuh317ey01972rg9r17rg37
+  const id = crypto.randomUUID(); // 1 = j39rh-9whrf381hd28dhf
 
-  await db.insert(apiKeys).values({id, name, hashedKey: hashed, last4});
+  await db.insert(apiKeys).values({id, name, hashedKey: hashed, last4}); // insert into api_keys (id, name, hashed_key, last4) values (...)
   return {id, name, key, last4 } as const;
 }
 
 export async function listKeys(){
-  return await db.select().from(apiKeys).orderBy(desc(apiKeys.createdAt));
+  return await db.select().from(apiKeys).orderBy(desc(apiKeys.createdAt)); // list all key
 }
 
 export async function revokeKey(id: string){
   const res = await db
     .update(apiKeys)
     .set({ revoked: true })
-    .where(eq(apiKeys.id, id));
+    .where(eq(apiKeys.id, id)); // revoke key
   return (res.rowCount ?? 0) > 0;
 }
