@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET() { // list all key that exist
   const rows = await listKeys();
   const items = rows.map((row) => ({
     id: row.id,
