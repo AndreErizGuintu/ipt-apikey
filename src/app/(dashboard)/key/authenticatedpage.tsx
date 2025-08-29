@@ -9,6 +9,8 @@ import {
   PieChart,
   Plus,
   ShieldIcon,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -56,6 +58,11 @@ export default function KeyPage() {
     id: string;
   } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showCreatedKey, setShowCreatedKey] = useState(false);
+
+  const toggleCreatedKeyVisibility = () => {
+    setShowCreatedKey(!showCreatedKey);
+  };
 
   async function createKey() {
     setLoading(true);
@@ -70,6 +77,7 @@ export default function KeyPage() {
       const data = await res.json();
       if (res.ok) {
         setJustCreated({ key: data.key, id: data.id });
+        setShowCreatedKey(false); // Hide the newly created key by default
       } else {
         throw new Error(data?.error || "Failed to create key");
       }
@@ -179,10 +187,20 @@ export default function KeyPage() {
                         <ShieldIcon className="mr-2" size={16} />
                         YOUR SECRET API KEY
                       </p>
-                      <Copybutton value={justCreated.key} />
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={toggleCreatedKeyVisibility}
+                          className="h-8 w-8 p-0 text-[#E74C3C] hover:bg-[#FFE0D6]"
+                        >
+                          {showCreatedKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </Button>
+                        <Copybutton value={justCreated.key} />
+                      </div>
                     </div>
                     <code className="mb-3 rounded-lg border border-[#FFE0D6] bg-white p-4 font-mono text-sm break-all text-gray-800">
-                      {justCreated.key}
+                      {showCreatedKey ? justCreated.key : "••••••••••••••••••••••••••••••••"}
                     </code>
                     <p className="mt-7 flex items-start text-xs text-gray-600">
                       <span className="mr-1 font-bold text-[#E74C3C]">•</span>
