@@ -36,3 +36,15 @@ export async function revokeKey(id: string){
     .where(eq(apiKeys.id, id)); // revoke key
   return (res.rowCount ?? 0) > 0;
 }
+
+export async function verifyKey(apiKey: string){
+  const hashed = sha256(apiKey);
+  const rows = await db
+  .select({id: apiKeys.id, revoke: apiKeys.revoked})
+  .from(apiKeys)
+  .where(eq(apiKeys.hashedKey, hashed)) // select * from api_keys where
+  const row = rows[0];
+  if (!row) return { valid: false as const, reason: "not_found" as const };
+  if (row.revoke) return { valid: false as const, reason: "revoked" as const };
+  return { valid: true as const, keyid: row.id };
+}

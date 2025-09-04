@@ -1,12 +1,15 @@
 {
-    "vscord.app.privacyMode.enable": false,
-    "vscord.status.details.text.editing": "In workspace {problems}",
-    "vscord.status.details.text.viewing": "In workspace {problems}",
-    "vscord.status.state.text.debugging": "Debugging: workspace",
-    "vscord.app.name": "Visual Studio Code",
-    "vscord.ignore.workspacesText": "",
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    },
-    "vscode-pets.theme": "forest"
+  "vscord.app.privacyMode.enable": false,
+  "vscord.status.details.text.editing": "In workspace {problems}",
+  "vscord.status.details.text.viewing": "In workspace {problems}",
+  "vscord.status.state.text.debugging": "Debugging: workspace",
+  "vscord.app.name": "Visual Studio Code",
+  "vscord.ignore.workspacesText": "",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "vscode-pets.theme": "forest",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "notebook.defaultFormatter": "esbenp.prettier-vscode"
 }
