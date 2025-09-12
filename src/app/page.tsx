@@ -75,11 +75,13 @@ export default async function HomePage() {
               Get Started
             </button>
           </SignInButton>
-     <SignInButton>
-        <button className="border-2 border-white hover:bg-white hover:text-[#E74C3C] px-6 py-3 rounded-md font-medium transition">
-          View Documentation
-        </button>
-   </SignInButton>
+     
+        <Link href="/docs">
+          <button className="border-2 border-white hover:bg-white hover:text-[#E74C3C] px-6 py-3 rounded-md font-medium transition">
+            View Documentation
+          </button>
+        </Link>
+   
           </SignedOut>
       </div>
     </div>
