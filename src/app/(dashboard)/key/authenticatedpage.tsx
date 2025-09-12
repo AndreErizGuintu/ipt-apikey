@@ -108,8 +108,10 @@ export default function KeyPage() {
   }
 
   useEffect(() => {
-    load();
-  });
+    if (userId) {
+      load();
+    }
+  }, [userId]); 
 
   return (
     <SignedIn>
