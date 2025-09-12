@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@clerk/nextjs";
 import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/nextjs";
 import {
   BookOpen,
@@ -64,6 +65,8 @@ export default function KeyPage() {
     setShowCreatedKey(!showCreatedKey);
   };
 
+  const { userId } = useAuth(); // Get the logged-in user's ID
+
   async function createKey() {
     setLoading(true);
     try {
@@ -72,7 +75,7 @@ export default function KeyPage() {
         headers: {
           "content-Type": "application/json",
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, userId }), // Pass userId to the backend
       });
       const data = await res.json();
       if (res.ok) {
@@ -87,24 +90,26 @@ export default function KeyPage() {
   }
 
   async function load() {
-    const res = await fetch("/api/keys", { cache: "no-store" });
+    if (!userId) return;
+    const res = await fetch(`/api/keys?userId=${userId}`, {
+      cache: "no-store",
+    });
     const data = await res.json();
     setItems(data.items ?? []);
   }
-  
- async function revokeKey(id: string)
-{
-  const res = await fetch(`/api/keys?id=${id}`, {
-    method: "DELETE",
-  });
-  const data = await res.json();
-  if (!res.ok) alert(data?.error || "Failed to revoke key");
-  await load();
-}
+
+  async function revokeKey(id: string) {
+    const res = await fetch(`/api/keys?id=${id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (!res.ok) alert(data?.error || "Failed to revoke key");
+    await load();
+  }
 
   useEffect(() => {
     load();
-  }, [createKey]);
+  });
 
   return (
     <SignedIn>
@@ -194,13 +199,19 @@ export default function KeyPage() {
                           onClick={toggleCreatedKeyVisibility}
                           className="h-8 w-8 p-0 text-[#E74C3C] hover:bg-[#FFE0D6]"
                         >
-                          {showCreatedKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showCreatedKey ? (
+                            <EyeOff size={16} />
+                          ) : (
+                            <Eye size={16} />
+                          )}
                         </Button>
                         <Copybutton value={justCreated.key} />
                       </div>
                     </div>
                     <code className="mb-3 rounded-lg border border-[#FFE0D6] bg-white p-4 font-mono text-sm break-all text-gray-800">
-                      {showCreatedKey ? justCreated.key : "••••••••••••••••••••••••••••••••"}
+                      {showCreatedKey
+                        ? justCreated.key
+                        : "••••••••••••••••••••••••••••••••"}
                     </code>
                     <p className="mt-7 flex items-start text-xs text-gray-600">
                       <span className="mr-1 font-bold text-[#E74C3C]">•</span>

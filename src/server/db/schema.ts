@@ -4,6 +4,7 @@
 import { sql } from "drizzle-orm";
 import { index, pgTableCreator } from "drizzle-orm/pg-core";
 
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -16,6 +17,7 @@ export const apiKeys = createTable(
   "api_keys",
   (d) => ({
     id: d.text("id").primaryKey(),
+    userId: d.text("userId").notNull(),
     name: d.varchar({ length: 256 }).notNull(),
     hashedKey: d.text("hashed_key").notNull(),
     last4: d.varchar("last4", { length: 4 }).notNull(),
@@ -26,3 +28,20 @@ export const apiKeys = createTable(
     revoked: d.boolean("revoked").default(false).notNull(),
   }),
 );
+
+export const recipes = createTable(
+  "recipes",
+  (d) => ({
+    id: d.serial("id").primaryKey(), // Auto-incrementing ID
+    title: d.varchar("title", { length: 256 }).notNull(),
+    description: d.text("description").notNull(),
+    instructions: d.text("instructions").notNull(),
+    prepTime: d.integer("prep_time").notNull(), // in minutes
+    cookTime: d.integer("cook_time").notNull(), // in minutes
+    servings: d.integer("servings").notNull(),
+    ingredients: d.text("ingredients").notNull(), // Comma-separated list
+    imageUrl: d.varchar("image_url", { length: 512 }), // Optional image URL
+  }),
+);
+
+

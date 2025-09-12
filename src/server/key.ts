@@ -16,17 +16,23 @@ export function sha256(data: string) {
   return createHash("sha256").update(data).digest("hex"); //dsgsdgusogisdgshdgsuoghud  //asuh317ey01972rg9r17rg37
 }
 
-export async function insertKey(name: string){
+export async function insertKey(name: string, userId: string) {
   const { key, last4 } = generatePlainKey();
-  const hashed = sha256(key);   //asuh317ey01972rg9r17rg37
-  const id = crypto.randomUUID(); // 1 = j39rh-9whrf381hd28dhf
+  const hashed = sha256(key);
+  const id = crypto.randomUUID();
 
-  await db.insert(apiKeys).values({id, name, hashedKey: hashed, last4}); // insert into api_keys (id, name, hashed_key, last4) values (...)
-  return {id, name, key, last4 } as const;
+  await db
+    .insert(apiKeys)
+    .values({ userId, id, name, hashedKey: hashed, last4 });
+  return { id, name, key, last4, userId } as const;
 }
 
-export async function listKeys(){
-  return await db.select().from(apiKeys).orderBy(desc(apiKeys.createdAt)); // list all key
+export async function listKeys(userId: string) {
+  return await db
+    .select()
+    .from(apiKeys)
+    .where(eq(apiKeys.userId, userId))
+    .orderBy(desc(apiKeys.createdAt));
 }
 
 export async function revokeKey(id: string){

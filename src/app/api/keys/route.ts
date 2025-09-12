@@ -1,12 +1,16 @@
 import { NextRequest } from "next/server";
+import z from "zod";
 import { insertKey, listKeys, revokeKey } from "~/server/key";
 import { createKeySchema, deleteKeySchema } from "~/server/validation";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name } = createKeySchema.parse(body);
-    const created = await insertKey(name);
+    const { name, userId } = createKeySchema
+      .extend({ userId: z.string() })
+      .parse(body);
+    const created = await insertKey(name, userId);
     return Response.json(created, { status: 201 });
   } catch (e: any) {
     return Response.json(
@@ -16,8 +20,13 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() { // list all key that exist
-  const rows = await listKeys();
+export async function GET() {
+  const user = await currentUser();
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const rows = await listKeys(user.id); // Pass user.id to filter keys
   const items = rows.map((row) => ({
     id: row.id,
     name: row.name,
