@@ -355,6 +355,287 @@ export default function DocsPage() {
             </Card>
           </section>
 
+          {/* API Endpoints Documentation Section - Add this after the Authentication section */}
+          <section
+            id="api-endpoints"
+            className="mb-12 max-w-4xl overflow-hidden rounded-2xl border-2 border-[#FFE0D6] bg-white shadow-xl"
+          >
+            <div className="flex items-center bg-[#E74C3C] px-6 py-4">
+              <ListOrdered className="mr-3 text-white" size={22} />
+              <h2 className="font-serif text-xl font-bold text-white">
+                API Endpoints & Usage
+              </h2>
+            </div>
+            <div className="p-6">
+              <p className="mb-6 text-gray-700">
+                LutongPinoyAPI provides two main endpoints for accessing
+                Filipino recipe data. Use GET for listing with
+                pagination/filtering, and POST for advanced search capabilities.
+              </p>
+
+              {/* Endpoint Overview Cards */}
+              <div className="mb-8 grid gap-4 md:grid-cols-2">
+                <div className="rounded-lg border border-[#FFE0D6] bg-[#FFF5F0] p-4">
+                  <h3 className="mb-2 font-semibold text-[#E74C3C]">
+                    📋 GET /api/ping
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    List recipes with pagination, filtering by category, and
+                    sorting options
+                  </p>
+                </div>
+                <div className="rounded-lg border border-[#FFE0D6] bg-[#FFF5F0] p-4">
+                  <h3 className="mb-2 font-semibold text-[#E74C3C]">
+                    🔍 POST /api/echo
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Advanced search for recipes by title or ingredients
+                  </p>
+                </div>
+              </div>
+
+              {/* GET Endpoint Details */}
+              <div className="mb-8">
+                <h3 className="mb-4 text-lg font-semibold text-gray-800">
+                  GET /api/ping - Recipe Listing
+                </h3>
+
+                <div className="mb-4">
+                  <h4 className="mb-2 font-medium text-gray-700">
+                    Query Parameters:
+                  </h4>
+                  <div className="rounded-lg bg-gray-50 p-4">
+                    <div className="grid gap-2 text-sm">
+                      <div>
+                        <code className="rounded bg-gray-200 px-2 py-1">
+                          page
+                        </code>{" "}
+                        - Page number (default: 1)
+                      </div>
+                      <div>
+                        <code className="rounded bg-gray-200 px-2 py-1">
+                          limit
+                        </code>{" "}
+                        - Items per page (default: 10)
+                      </div>
+                      <div>
+                        <code className="rounded bg-gray-200 px-2 py-1">
+                          category
+                        </code>{" "}
+                        - Filter by category (optional)
+                      </div>
+                      <div>
+                        <code className="rounded bg-gray-200 px-2 py-1">
+                          sortBy
+                        </code>{" "}
+                        - Sort field: title, prepTime, cookTime (default: title)
+                      </div>
+                      <div>
+                        <code className="rounded bg-gray-200 px-2 py-1">
+                          order
+                        </code>{" "}
+                        - Sort order: asc, desc (default: asc)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="mb-2 font-medium text-gray-700">
+                      Basic Usage:
+                    </h5>
+                    <div className="rounded-lg bg-gray-800 p-4">
+                      <pre className="overflow-x-auto text-sm text-green-400">
+                        <code>{`# Get all recipes (page 1, default limit)
+GET ${baseurl}/api/ping
+
+# Response:
+{
+  "ok": true,
+  "message": "Items retrieved successfully",
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 10
+  }
+}`}</code>
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="mb-2 font-medium text-gray-700">
+                      With Pagination:
+                    </h5>
+                    <div className="rounded-lg bg-gray-800 p-4">
+                      <pre className="overflow-x-auto text-sm text-green-400">
+                        <code>{`# Get page 2 with 5 items per page
+GET ${baseurl}/api/ping?page=2&limit=5`}</code>
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="mb-2 font-medium text-gray-700">
+                      With Filtering & Sorting:
+                    </h5>
+                    <div className="rounded-lg bg-gray-800 p-4">
+                      <pre className="overflow-x-auto text-sm text-green-400">
+                        <code>{`# Filter by category and sort by prep time (descending)
+GET ${baseurl}/api/ping?category=chicken&sortBy=prepTime&order=desc
+
+# Filter by category and sort by cook time (ascending)
+GET ${baseurl}/api/ping?category=pork&sortBy=cookTime&order=asc`}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* POST Endpoint Details */}
+              <div className="mb-8">
+                <h3 className="mb-4 text-lg font-semibold text-gray-800">
+                  POST /api/echo - Advanced Search
+                </h3>
+
+                <p className="mb-4 text-gray-600">
+                  Search for recipes by title or ingredients using partial
+                  matching. Perfect for finding specific dishes.
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="mb-2 font-medium text-gray-700">
+                      Search by Recipe Name:
+                    </h5>
+                    <div className="rounded-lg bg-gray-800 p-4">
+                      <pre className="overflow-x-auto text-sm text-green-400">
+                        <code>{`# Search for "adobo" recipes
+POST ${baseurl}/api/echo
+Content-Type: application/json
+
+{
+  "postBody": "adobo"
+}
+
+# Response:
+{
+  "ok": true,
+  "message": "Recipe(s) found successfully",
+  "recipes": [
+    {
+      "id": 1,
+      "title": "Chicken Adobo",
+      "description": "A classic Filipino dish...",
+      "prepTime": 15,
+      "cookTime": 45,
+      "servings": 4
+    }
+  ]
+}`}</code>
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="mb-2 font-medium text-gray-700">
+                      Search by Ingredient:
+                    </h5>
+                    <div className="rounded-lg bg-gray-800 p-4">
+                      <pre className="overflow-x-auto text-sm text-green-400">
+                        <code>{`# Find all recipes with "chicken"
+POST ${baseurl}/api/echo
+Content-Type: application/json
+
+{
+  "postBody": "chicken"
+}
+
+# This will return all recipes with "chicken" in the title`}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* JavaScript Examples */}
+              <div className="mb-6">
+                <h3 className="mb-4 text-lg font-semibold text-gray-800">
+                  JavaScript Examples
+                </h3>
+
+                <div className="rounded-lg bg-gray-800 p-4">
+                  <pre className="overflow-x-auto text-sm text-blue-300">
+                    <code>{`// Fetch recipes with pagination and filtering
+async function getRecipes(page = 1, category = '', sortBy = 'title') {
+  const queryParams = new URLSearchParams({
+    page: page.toString(),
+    limit: '10',
+    sortBy,
+    order: 'asc'
+  });
+  
+  if (category) queryParams.append('category', category);
+  
+  const response = await fetch('${baseurl}/api/ping?' + queryParams, {
+    headers: {
+      'x-api-key': 'YOUR_API_KEY_HERE'
+    }
+  });
+  
+  return response.json();
+}
+
+// Search for specific recipes
+async function searchRecipes(searchTerm) {
+  const response = await fetch('${baseurl}/api/echo', {
+    method: 'POST',
+    headers: {
+      'x-api-key': 'YOUR_API_KEY_HERE',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ postBody: searchTerm })
+  });
+  
+  return response.json();
+}
+
+// Usage examples:
+const recipes = await getRecipes(1, 'chicken', 'prepTime');
+const searchResults = await searchRecipes('adobo');`}</code>
+                  </pre>
+                </div>
+              </div>
+
+              {/* Common Use Cases */}
+              <div className="rounded-lg border-l-4 border-blue-400 bg-blue-50 p-4">
+                <h4 className="mb-2 font-semibold text-blue-700">
+                  💡 Common Use Cases
+                </h4>
+                <ul className="space-y-1 text-sm text-blue-600">
+                  <li>
+                    • Browse all recipes with pagination:{" "}
+                    <code>GET /api/ping?page=1&limit=20</code>
+                  </li>
+                  <li>
+                    • Find chicken recipes sorted by cooking time:{" "}
+                    <code>GET /api/ping?category=chicken&sortBy=cookTime</code>
+                  </li>
+                  <li>
+                    • Search for specific dishes: <code>POST /api/echo</code>{" "}
+                    with <code>{`{"postBody": "sisig"}`}</code>
+                  </li>
+                  <li>
+                    • Get quick cooking recipes:{" "}
+                    <code>GET /api/ping?sortBy=prepTime&order=asc&limit=5</code>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
           {/* Error Handling Section */}
           <section
             id="errors"

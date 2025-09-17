@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { verifyKey } from "~/server/key";
-import { ilike } from "drizzle-orm"; // Import ilike for partial matching
+import { ilike, or } from "drizzle-orm"; // Import ilike for partial matching
 import { db } from "~/server/db";
 import { recipes } from "~/server/db/schema";
 
@@ -36,7 +36,13 @@ export async function POST(req: NextRequest) {
         imageUrl: recipes.imageUrl,
       })
       .from(recipes)
-      .where(ilike(recipes.title, `%${body.postBody}%`));
+      .where(
+        or(
+          ilike(recipes.title, `%${body.postBody}%`),
+          ilike(recipes.ingredients, `%${body.postBody}%`),
+          ilike(recipes.category, `%${body.postBody}%`),
+        ),
+      );
 
     if (getDish.length === 0) {
       return Response.json(
@@ -48,8 +54,9 @@ export async function POST(req: NextRequest) {
     return Response.json(
       {
         ok: true,
-        message: "Recipe found successfully.",
-        recipe: getDish[0],
+        message: "Recipe(s) found successfully.",
+        recipes: getDish,
+        count: getDish.length,
         keyId: result.keyid,
       },
       { status: 200 },
