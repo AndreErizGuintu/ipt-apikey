@@ -1,29 +1,28 @@
-# Create T3 App
+🍲 IPT-APIKey — Food Recipe API
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A simple web project built with the T3 Stack (TypeScript, React, Next.js, Drizzle) designed to explore how APIs work.
+This API stores and provides access to a collection of Filipino and global food recipes, complete with details like preparation time, cooking time, ingredients, and instructions.
 
-## What's next? How do I make an app with this?
+⚙️ Tech Stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Next.js (React + TypeScript) → Frontend & API routes
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Drizzle ORM → Database management
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+T3 Stack → Full project scaffold
 
-## Learn More
+📖 What This Project Shows
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+How data is structured and delivered through an API.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Using API keys to control access.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Implementing pagination, filtering, and sorting to organize responses.
 
-## How do I deploy this?
+Performing search queries to find data efficiently.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+🚀 Future Enhancements
+
+Add more recipe categories.
+
+Include ratings or difficulty levels.
