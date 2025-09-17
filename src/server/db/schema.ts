@@ -35,6 +35,7 @@ export const recipes = createTable(
     id: d.serial("id").primaryKey(), // Auto-incrementing ID
     title: d.varchar("title", { length: 256 }).notNull(),
     description: d.text("description").notNull(),
+    category: d.varchar("category", { length: 128 }),
     instructions: d.text("instructions").notNull(),
     prepTime: d.integer("prep_time").notNull(), // in minutes
     cookTime: d.integer("cook_time").notNull(), // in minutes

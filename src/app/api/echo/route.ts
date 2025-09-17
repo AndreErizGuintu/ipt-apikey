@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
         cookTime: recipes.cookTime,
         servings: recipes.servings,
         ingredients: recipes.ingredients,
+        category: recipes.category,
         imageUrl: recipes.imageUrl,
       })
       .from(recipes)
